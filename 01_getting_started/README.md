@@ -9,7 +9,7 @@ As part of this module we will set up the development environment to develop dat
 * Setup Postgres Database
 * Overview of Postgres
 * Setup Project using PyCharm
-* Add required dependencies
+* Managing Dependencies
 * Create GitHub Repository
 
 ## Setup Docker
@@ -250,6 +250,57 @@ DROP TABLE t;
 Let us setup project using PyCharm. I will be using PyCharm Enterprise Edition. However, you can use Community Edition as well.
 * Create New Project by name **data-copier**.
 * Make sure virtual environment is created with name **data-copier-env**.
-* Create a program by name **app.py**
-## Add required dependencies
+* Create a program by name **app.py**.
+* Add below code to it and validate using PyCharm.
+```python
+def main():
+    print("Hello World!")
+
+
+if __name__ == "__main__":
+    main()
+```
+## Managing Dependencies
+Let us see how we can manage dependencies for Python Projects.
+* We use Pip to manage dependencies for Python based Projects.
+* Here is the typical life cycle.
+  * Search for Python libraries using [https://pypi.org](https://pypi.org).
+  * One can install directly using `pip install` Command. For example `pip install configparser`.
+  * To overcome compatibility issues, we need to decide on versions.
+  * We can also pass version of the library to `pip install` command. For example `pip install configparser==5.0.0`.
+* For projects we keep track of all the external libraries using a text file - e.g. **requirements.txt**.
+* We can add Postgres and MySQL related libraries to **requirements.txt**
+```text
+mysql-connector-python==8.0.20
+psycopg2-binary==2.8.5
+```
+* We will take care of other libraries later.
+* Once libraries are defined as part of **requirements.txt**, we can run `pip install -r requirements.txt`.
+* We can also uninstall all the libraries using relevant command. 
 ## Create GitHub Repository
+As we have skeleton of the project, let us setup GitHub repository to streamline future code changes.
+* GitHube can be used to version our application.
+* We can initialize GitHub repository by saying `git init`. It will create **.git** directory to keep track of changes.
+* GitHub should only contain source code related to our application. Hence, we should ignore non source code files and folders such as following:
+  * **.idea** - a folder created by PyCharm to keep track of IDE preferences and settings.
+  * **__pycache__** - a file which contain bytecode of the program which can be interpreted by Python interpreter.
+  * **data-copier-env** - a directory which is created when virtual environment is added to our project.
+  * We might add other files in future.
+```text
+data-copier-env
+__pycache__
+.idea
+```
+* Add the source code files to keep track of changes and then commit.
+```shell script
+git add . 
+# Adds all the files recursively from the directory in which command is executed
+# We can also add specific files or directories
+git commit
+# Review all the files and make sure only source code files are included along with README.md
+# Add commit message and save. If you are not comfortable with command line you can use Pycharm Git Plugin.
+# You can also give commit message with git commit itself
+git commit -m "Initial Commit"
+```
+* Now go to [GitHub Website](https://www.github.com) and add a repository as demonstrated. Make sure to sign up if you do not have account.
+* Follow the instructions provided after repository is created to push the existing repository.
