@@ -3,6 +3,7 @@ As part of this module we will set up the development environment to develop dat
 
 * Setup Docker
 * Quick Overview of Docker
+* Prepare Dataset
 * Setup MySQL Database
 * Overview of MySQL
 * Setup Postgres Database
@@ -32,15 +33,23 @@ Docker is one of the key technology to learn. Let us quickly review some of the 
   * Containers are ephemeral (stateless)
   * Production Databases should not be running on Docker Containers
   * Production Applications are typically deployed using Docker Containers
-## Setup MySQL Database
-Let us setup source database using MySQL as part of Docker Container.
+## Prepare Dataset
+Let us prepare dataset to play around. Dataset is part of GitHub Repository.
+* The data set is called as **retail_db**. It is a hypothetical data set provided by Cloudera as part of Cloudera QuickStart VM.
 * Clone **retail_db** repository from GitHub. We will use this repository to setup tables and load data as part of the database.
-```
+```shell script
 git clone https://www.github.com/dgadiraju/retail_db.git
 ```
+* It has some scripts as well as comma separated files as well.
+* As part of this usecase we will use scripts which will create tables as well as load data sets.
+* **create_db.sql** is the script which will facilitate us to create tables and load data as part of MySQL based Database.
+* **create_db_tables_pg.sql** is the script which will facilitate us to create tables alone. It will not load data into the tables.
+
+## Setup MySQL Database
+Let us setup source database using MySQL as part of Docker Container.
 * Pull image `docker pull mysql`
 * Create and start container using `docker run`
-```
+```shell script
 docker run \
   --name mysql_retail_db \
   -e MYSQL_ROOT_PASSWORD=itversity \
@@ -52,20 +61,20 @@ docker run \
 * We can review the logs by using `docker logs -f mysql_retail_db` command.
 * Make sure retail_db is either mounted or copied on to the Docker Container.
 * Connect to MySQL database using `docker exec`
-```
+```shell script
 docker exec \
   -it mysql_retail_db \
   mysql -u root -p
 ```
 * Create Database and User as part of MySQL running in Docker
-```
+```sql
 CREATE DATABASE retail_db;
 CREATE USER retail_user IDENTIFIED BY 'itversity';
 GRANT ALL ON retail_db.* TO retail_user;
 FLUSH PRIVILEGES;
 ```
 * Run **/retail_db/create_db.sql** to create tables and load data using MySQL CLI.
-```
+```sql
 USE retail_db;
 SOURCE /retail_db/create_db.sql
 ```
@@ -78,23 +87,169 @@ Let us get a quick overview of MySQL.
   * Database User: **retail_user**
   * Permissions: **ALL** (DDL, DML, Queries)
 * Let us create additional table with 2 fields.
-```
+```sql
 CREATE TABLE t (
   i INT,
-  s STRING
+  s VARCHAR(10)
 );
 ```
+* CRUD Operations (DML)
+  * C - Create -> INSERT
+  * R - Read -> Querying using SELECT
+  * U - Update -> UPDATE
+  * D - Delete -> DELETE
+  * CRUD Operations are achieved using Data Manipulation Language (DML).
+  * Syntax with respect DML Statements is same with most of the RDBMS Databases.
 * Let us insert data into the table.
   * Inserting one row at a time.
-```
+```sql
 INSERT INTO t VALUES (1, 'Hello');
 INSERT INTO t VALUES (2, 'World');
+SELECT * FROM t;
 ```
   * Inserting multiple rows at a time (bulk insert or batch insert)
+```sql
+INSERT INTO t VALUES 
+    (1, 'Hello'),
+    (2, 'World');
+SELECT * FROM t;
+```
 * Let us update data in the table.
+```sql
+UPDATE t SET s = lower(s);
+UPDATE t SET s = 'Hello' WHERE s = 'hello';
+UPDATE t SET s = 'Hello' WHERE s = 'hello';
+SELECT * FROM t;
+```
 * Let us delete data from the table.
+```sql
+DELETE FROM t WHERE s = 'Hello';
+UPDATE t SET s = 'Hello' WHERE s = 'hello';
+DELETE FROM t; -- Deletes all the data from a given table.
+SELECT * FROM t;
+```
+* We can also clean up the whole table using DDL Statement. `TRUNCATE` is faster to clean up the data compared to `DELETE` with out conditions.
+```sql
+TRUNCATE TABLE t;
+SELECT * FROM t;
+```
+* We can drop the table using `DROP` Command.
+```sql
+DROP TABLE t;
+```
+* SQL Commands starts with `CREATE`, `ALTER`, `TRUNCATE`, `DROP` etc are called as Data Definition Language or DDL Commands.
 ## Setup Postgres Database
+Let us setup source database using Postgres as part of Docker Container.
+* Pull image `docker pull postgres`
+* Create and start container using `docker run`
+```shell script
+docker run \
+  --name pg_retail_db \
+  -e POSTGRES_PASSWORD=itversity \
+  -d \
+  -v /home/dgadiraju/retail_db:/retail_db \
+  -p 5432:5432 \
+  postgres
+```
+* We can review the logs by using `docker logs -f pg_retail_db` command.
+* Make sure retail_db is either mounted or copied on to the Docker Container.
+* Connect to Postgres database using `docker exec`
+```shell script
+docker exec \
+  -it pg_retail_db \
+  psql -U postgres -W
+```
+* Create Database and User as part of Postgres running in Docker
+```sql
+CREATE DATABASE retail_db;
+CREATE USER retail_user WITH ENCRYPTED PASSWORD 'itversity';
+GRANT ALL PRIVILEGES ON DATABASE retail_db TO retail_user;
+```
+* Run **/retail_db/create_db.sql** to create tables using Postgres CLI.
+```shell script
+docker exec \
+  -it pg_retail_db \
+  psql -U retail_user \
+  -d retail_db  \
+  -W \
+  -f /retail_db/create_db_tables_pg.sql
+```
 ## Overview of Postgres
+Let us get a quick overview of Postgres Database.
+* Postgres is multi tenant database server. It means there can be multiple databases per server.
+* We typically create databases and users then grant different types of permissions for different users.
+* Here are the details about our database:
+  * Database Name: **retail_db**
+  * Database User: **retail_user**
+  * Permissions: **ALL** (DDL, DML, Queries)
+* Login to the system or Docker container where Postgres is running. In my case I am connecting to Docker container.
+```shell script
+docker exec \
+  -it pg_retail_db \
+  bash
+```
+* Login to Postgres Database
+```shell script
+psql -U retail_user \
+  -d retail_db  \
+  -W
+```
+* Let us create additional table with 2 fields.
+```sql
+CREATE TABLE t (
+  i INT,
+  s VARCHAR(10)
+);
+```
+* CRUD Operations (DML)
+  * C - Create -> INSERT
+  * R - Read -> Querying using SELECT
+  * U - Update -> UPDATE
+  * D - Delete -> DELETE
+  * CRUD Operations are achieved using Data Manipulation Language (DML).
+  * Syntax with respect DML Statements is same with most of the RDBMS Databases.
+* Let us insert data into the table.
+  * Inserting one row at a time.
+```sql
+INSERT INTO t VALUES (1, 'Hello');
+INSERT INTO t VALUES (2, 'World');
+SELECT * FROM t;
+```
+  * Inserting multiple rows at a time (bulk insert or batch insert)
+```sql
+INSERT INTO t VALUES 
+    (1, 'Hello'),
+    (2, 'World');
+SELECT * FROM t;
+```
+* Let us update data in the table.
+```sql
+UPDATE t SET s = lower(s);
+SELECT * FROM t;
+UPDATE t SET s = 'Hello' WHERE s = 'hello';
+SELECT * FROM t;
+```
+* Let us delete data from the table.
+```sql
+DELETE FROM t WHERE s = 'Hello';
+SELECT * FROM t;
+DELETE FROM t; -- Deletes all the data from a given table.
+SELECT * FROM t;
+```
+* We can also clean up the whole table using DDL Statement. `TRUNCATE` is faster to clean up the data compared to `DELETE` with out conditions.
+```sql
+TRUNCATE TABLE t;
+SELECT * FROM t;
+```
+* We can drop the table using `DROP` Command.
+```sql
+DROP TABLE t;
+```
+* SQL Commands starts with `CREATE`, `ALTER`, `TRUNCATE`, `DROP` etc are called as Data Definition Language or DDL Commands.
 ## Setup Project using PyCharm
+Let us setup project using PyCharm. I will be using PyCharm Enterprise Edition. However, you can use Community Edition as well.
+* Create New Project by name **data-copier**.
+* Make sure virtual environment is created with name **data-copier-env**.
+* Create a program by name **app.py**
 ## Add required dependencies
 ## Create GitHub Repository
