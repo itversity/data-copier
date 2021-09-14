@@ -165,7 +165,7 @@ CREATE DATABASE retail_db;
 CREATE USER retail_user WITH ENCRYPTED PASSWORD 'itversity';
 GRANT ALL PRIVILEGES ON DATABASE retail_db TO retail_user;
 ```
-* Run **/retail_db/create_db.sql** to create tables using Postgres CLI.
+* Run **/retail_db/create_db_tables_pg.sql** to create tables using Postgres CLI.
 ```shell script
 docker exec \
   -it pg_retail_db \
