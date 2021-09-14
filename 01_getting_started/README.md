@@ -1,7 +1,7 @@
 # Getting Started
 As part of this module we will set up the development environment to develop data integration application to copy data from a source database (MySQL) to a target database (Postgres).
 
-* Problem Statement
+* Problem Statement - Data Copier
 * Setup Docker
 * Quick Overview of Docker
 * Prepare Dataset
@@ -56,23 +56,34 @@ git clone https://www.github.com/itversity/retail_db_json.git
 ## Setup Postgres Database
 Let us setup source database using Postgres as part of Docker Container.
 * Pull image `docker pull postgres`
+* Create folder for Postgres Database
+```shell script
+mkdir retail_pg
+```
 * Create and start container using `docker run`
 ```shell script
 docker run \
-  --name pg_retail_db \
+  --name retail_pg \
   -e POSTGRES_PASSWORD=itversity \
   -d \
-  -v /home/dgadiraju/retail_db:/retail_db \
-  -p 5432:5432 \
+  -v `pwd`/data/retail_db_json:/data/retail_db_json \
+  -v `pwd`/retail_pg:/var/lib/postgresql/data \
+  -p 5452:5432 \
   postgres
+
+# Windows using Powershell
+docker run --name retail_pg -e POSTGRES_PASSWORD=itversity -d -v C:\Users\dgadiraju\Projects\data-copier\retail_pg:/var/lib/postgresql/data -v C:\Users\dgadiraju\Projects\retail_db_json:/retail_db_json -p 5452:5432 postgres
 ```
 * We can review the logs by using `docker logs -f pg_retail_db` command.
 * Make sure retail_db is either mounted or copied on to the Docker Container.
 * Connect to Postgres database using `docker exec`
 ```shell script
 docker exec \
-  -it pg_retail_db \
-  psql -U postgres -W
+  -it retail_pg \
+  psql -U postgres
+
+# On Windows
+docker exec -it retail_pg psql -U postgres
 ```
 * Create Database and User as part of Postgres running in Docker
 ```sql
@@ -80,14 +91,16 @@ CREATE DATABASE retail_db;
 CREATE USER retail_user WITH ENCRYPTED PASSWORD 'itversity';
 GRANT ALL PRIVILEGES ON DATABASE retail_db TO retail_user;
 ```
-* Run **/retail_db/create_db_tables_pg.sql** to create tables using Postgres CLI.
+* Run **/retail_db_json/create_db_tables_pg.sql** to create tables using Postgres CLI.
 ```shell script
 docker exec \
   -it retail_pg \
   psql -U retail_user \
   -d retail_db  \
-  -W \
   -f /data/retail_db/create_db_tables_pg.sql
+
+# On Windows
+docker exec -it retail_pg psql -U retail_user -d retail_db -f /retail_db_json/create_db_tables_pg.sql
 ```
 ## Overview of Postgres
 Let us get a quick overview of Postgres Database.
