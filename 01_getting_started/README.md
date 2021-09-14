@@ -14,7 +14,7 @@ As part of this module we will set up the development environment to develop an 
 ## Problem Statement - Data Copier
 Let us go through the problem statement for our project. We would like to develop the code to copy data which are in files using JSON Format to Postgres Database.
 
-Data is available in another repository called as **retail_db_json**. We will see how to setup the repository later. But we will review the data now.
+Data is available in another repository called as [retail_db_json](https://github.com/itversity/retail_db_json). We will see how to setup the repository later. But we will review the data now.
 
 ## Setup Docker
 Let us understand different options to setup Docker using different environments. We will also see how to set up Docker on Cloud9
