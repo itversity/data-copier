@@ -1,5 +1,5 @@
 # Getting Started
-As part of this module we will set up the development environment to develop data integration application to copy data from a source database (MySQL) to a target database (Postgres).
+As part of this module we will set up the development environment to develop data integration application to copy data from JSON Files to a target database (Postgres).
 
 * Problem Statement - Data Copier
 * Setup Docker
