@@ -14,14 +14,7 @@ As part of this module we will set up the development environment to develop an 
 ## Problem Statement - Data Copier
 Let us go through the problem statement for our project. We would like to develop the code to copy data which are in files using JSON Format to Postgres Database.
 
-Here are the steps involved.
-* Setup Postgres Database for Development
-* Create required databases and tables
-* Develop the code iteratively using Pycharm
-* Maintain the code in git for versioning
-* Validate or Run the code to copy the data
-* Build the installable for the application
-* Dockerize the application
+Data is available in another repository called as **retail_db_json**. We will see how to setup the repository later. But we will review the data now.
 
 ## Setup Docker
 Let us understand different options to setup Docker using different environments. We will also see how to set up Docker on Cloud9
