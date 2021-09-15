@@ -47,7 +47,7 @@ git clone https://www.github.com/itversity/retail_db_json.git
 * **create_db_tables_pg.sql** is the script which will facilitate us to create tables alone. It will not load data into the tables.
 
 ## Setup Postgres Database
-Let us setup source database using Postgres as part of Docker Container.
+Let us setup a database using Postgres as part of Docker Container.
 * Pull image `docker pull postgres`
 * Create folder for Postgres Database
 ```shell script
