@@ -1,6 +1,6 @@
 # Reading Data
+As part of this section we will primarily see how to read the JSON data from files using Pandas.
 
-* Setup Retail Data
 * Overview of Retail Data
 * Adding Pandas to the project
 * Reading Data using Pandas
@@ -8,21 +8,6 @@
 * Reading Data in Chunks
 * Dynamically read files
 * Create read program
-
-## Setup Retail Data
-Let us go ahead and setup Retail Data Set for the project.
-* Create a folder by name **data** using `mkdir -p data` command.
-* Go to **data** folder by running `cd data`.
-* Clone the **retail** data set repository from GitHub by running the below command.
-
-```
-git clone https://github.com/dgadiraju/retail_db_json.git
-```
-
-* It will create a folder by name **retail_db_json**. The folder should contain 6 folders related to 6 tables.
-* Each folder contain a **JSON** File.
-* **JSON** is nothing but specialized text file format. Hence, we will be able to preview the data using any standard editor.
-* Each line have one record and each attribute have it's name and value with in each record.
 
 ## Overview of Retail Data
 Here sre the details related to retail data. It is important to understand the data to come up with a strategy to copy the data.
@@ -88,6 +73,8 @@ Let us go through how we can use **Pandas** APIs to preview the data in Datafram
   * Convert dataframe to list of tuples
 
 ```python
+
+# The file name is hardcoded and assigned to fp.
 fp = '/Users/itversity/Projects/Internal/bootcamp/data-copier/data/retail_db_json/order_items/part-r-00000-6b83977e-3f20-404b-9b5f-29376ab1419e'
 
 import pandas as pd
@@ -114,21 +101,30 @@ fp = '/Users/itversity/Projects/Internal/bootcamp/data-copier/data/retail_db_jso
 
 import pandas as pd
 
+# Here is the piece of code to read the content of the file as reader.
 json_reader = pd.read_json(fp, lines=True, chunksize=1000)
 
+# Here is the piece of code to read each chunk as Dataframe.
 for idx, df in enumerate(json_reader):
   print(f'Number of records in chunk with index {idx} is {df.shape[0]}')
 ```
 
 ## Dynamically read files
+Let us understand how to read the files dynamically based on the table name which we are interested in. For now we will create variable for the table name and use it to dynamically load the files that belong to the table name.
 
 ```python
 import os
 BASE_DIR = '/Users/itversity/Projects/Internal/bootcamp/data-copier/data/retail_db_json'
 table_name = 'order_items'
+
+# Lists all the files in the folder. 
+# All our folders contain only one file.
+# Hence, we can access it by reading first element in the list as below.
+
 file_name = os.listdir(f'{BASE_DIR}/{table_name}')[0]
 fp = f'{BASE_DIR}/{table_name}/{file_name}'
 
+# Here is the piece of code to read the content of the file as Pandas Dataframe.
 import pandas as pd
 df = pd.read_json(fp, lines=True)
 
