@@ -202,7 +202,7 @@ pandas==1.3.2
  
 ## Create GitHub Repository
 As we have skeleton of the project, let us setup GitHub repository to streamline future code changes.
-* GitHube can be used to version our application.
+* GitHub can be used to version our application.
 * We can initialize GitHub repository by saying `git init`. It will create **.git** directory to keep track of changes.
 * GitHub should only contain source code related to our application. Hence, we should ignore non source code files and folders such as following:
   * **.idea** - a folder created by PyCharm to keep track of IDE preferences and settings.
