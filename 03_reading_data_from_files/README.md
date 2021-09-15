@@ -10,7 +10,7 @@ As part of this section we will primarily see how to read the JSON data from fil
 * Create read program
 
 ## Overview of Retail Data
-Here sre the details related to retail data. It is important to understand the data to come up with a strategy to copy the data.
+Here are the details related to retail data. It is important to understand the data to come up with a strategy to copy the data.
 * The data is sourced from RDBMS database.
 * In the source the tables are related.
 * There are 6 tables, out of which 3 tables are related to product catalog.
@@ -25,6 +25,8 @@ Here sre the details related to retail data. It is important to understand the d
   * Each order can have multiple items. All item level details are part of **order_items** table.
   * There is a one-to-many relationship between **orders** and **order_items**.
 * For each table, we have a folder and the folder contains one file. The file is of type json.
+* If there are foreign key relationships to tables in the target database, then we need to populate root or parent tables first and then go down in the hierarchy. Another common way is to disable the constraints, populate data in tables in any order and then enable the constraints back.
+* As our tables does not have constraints to enforce relationships we can load them in any order.
 
 ## Adding Pandas to the project
 We will be using Pandas to read the data from CSV files. Let us see how we can install and quickly validate.
