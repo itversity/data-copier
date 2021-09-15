@@ -29,11 +29,9 @@ Here are the details related to retail data. It is important to understand the d
 * As our tables does not have constraints to enforce relationships we can load them in any order.
 
 ## Adding Pandas to the project
-We will be using Pandas to read the data from CSV files. Let us see how we can install and quickly validate.
+We will be using Pandas to read the data from JSON files. Let us see how we can install and quickly validate.
 * Update **requirements.txt** with Pandas 1.3.2.
 ```
-psycopg2-binary==2.8.5
-SQLAlchemy==1.3.17
 pandas==1.3.2
 ```
 * Run `pip install -r requirements.txt` to ensure Pandas is installed as part of our project.
