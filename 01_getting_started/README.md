@@ -106,7 +106,7 @@ Let us get a quick overview of Postgres Database.
 * Login to the system or Docker container where Postgres is running. In my case I am connecting to Docker container.
 ```shell script
 docker exec \
-  -it pg_retail_db \
+  -it retail_pg \
   bash
 ```
 * Login to Postgres Database
