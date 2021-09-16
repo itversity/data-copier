@@ -69,7 +69,7 @@ Let us go through how we can use **Pandas** APIs to preview the data in Datafram
   * Get not null count of each attribute
   * Get the names and data types of each attribute
   * Project some of the fields in the Dataframe
-  * Filter the data for a give order_item_order_id
+  * Filter the data for a given order_item_order_id
 
 ```python
 
