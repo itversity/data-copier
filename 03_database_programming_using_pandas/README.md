@@ -22,7 +22,7 @@ docker ps -a # to list all the containers. We can check status to see if Postgre
 docker start retail_pg
 
 # Validate connectivity to the database in Postgres Server
-docker exec -it retail_pg psql -U retail_user -d retail_db
+docker exec -it retail_pg psql -U retail_user -d retail_db -W
 ```
 
 We can also run below commands to validate the tables in the database.
@@ -53,7 +53,7 @@ pandas==1.3.2
 Let us go ahead and create a new table in retail_db database. We will use this new table to understand how to use Pandas to read the data from database tables as well as to write data to database tables.
 
 ```shell
-docker exec -it retail psql -U retail_user -d retail_db
+docker exec -it retail_pg psql -U retail_user -d retail_db -W
 ```
 
 ```sql
