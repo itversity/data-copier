@@ -1,29 +1,23 @@
-# Writing Data to Database
+# Loading Data from files to tables
 
-* Creating departments table
+As part of this section let us get into the details about loading data from files into database tables using Pandas.
+
 * Populating departments table
 * Validate departments table
-* Creating orders table
 * Populating orders table
 * Validate orders table in database
-* Validate by querying orders table
-
-## Creating departments table
-
-```shell
-docker exec -it retail psql -U retail_user -d retail_db -W
-```
-
-```sql
-CREATE TABLE departments (
-    department_id INT PRIMARY KEY,
-    department_name VARCHAR(50)
-);
-```
+* Validate orders table using Pandas
 
 ## Populating departments table
 
+Let us verify if the departments table exists and then populate the table.
+
 ```python
+import pandas as pd
+
+conn = 'postgresql://retail_user:itversity@localhost:5452/retail_db'
+pd.read_sql('SELECT * FROM departments', conn)
+
 BASE_DIR = '/Users/itversity/Projects/Internal/bootcamp/data-copier/data/retail_db_json'
 table_name = 'departments'
 
@@ -40,6 +34,8 @@ df.to_sql(table_name, conn, if_exists='append', index=False)
 
 ## Validate departments table
 
+As the table is populated, let us see if we the data is now available in the table.
+
 ```python
 import pandas as pd
 query = 'SELECT * FROM departments'
@@ -52,24 +48,21 @@ df = pd.read_sql(
 df
 
 df.count()
+
+df.read_sql(
+	'SELECT count(1) FROM departments',
+	conn
+)
 ```
 
-## Creating orders table
-
-```shell
-docker exec -it retail psql -U retail_user -d retail_db -W
-```
-
-```sql
-CREATE TABLE orders (
-    order_id INT PRIMARY KEY,
-    order_date DATE,
-    order_customer_id INT,
-    order_status VARCHAR(30)
-);
-```
 
 ## Populating orders table
+
+Let us populate orders table in chunks. Here are the steps which we are going to follow.
+* Read data from files using `read_json` with chunksize set to 1000. It will create an object of type **JSON Reader**.
+* Create connection string using SQL Alchemy Syntax.
+* Iterate through JSON Reader object. In each iteration we will get a Dataframe of specified chunksize.
+* Load Dataframe related to each chunk into the target table.
 
 ```python
 BASE_DIR = '/Users/itversity/Projects/Internal/bootcamp/data-copier/data/retail_db_json'
@@ -104,7 +97,13 @@ SELECT * FROM orders LIMIT 10;
 
 SELECT count(*) FROM orders;
 ```
-## Validate by querying orders table
+
+## Validate orders table using Pandas
+
+Let us validate by querying data from orders table using Pandas.
+* Create dataframe for `SELECT * FROM orders`.
+* Create dataframe for order count by status.
+* If you are interested, you can come up with your own scenarios and run the queries using `read_sql`.
 
 ```python
 import pandas as pd
@@ -120,4 +119,9 @@ df
 df.count()
 
 df.dtypes
+
+pd.read_sql(
+    'SELECT order_status, count(1) AS order_count FROM orders GROUP BY order_status',
+    conn
+)
 ```
