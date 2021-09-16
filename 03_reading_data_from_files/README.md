@@ -70,7 +70,6 @@ Let us go through how we can use **Pandas** APIs to preview the data in Datafram
   * Get the names and data types of each attribute
   * Project some of the fields in the Dataframe
   * Filter the data for a give order_item_order_id
-  * Convert dataframe to list of tuples
 
 ```python
 
