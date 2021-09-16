@@ -1,4 +1,4 @@
-# Reading and Writing Data to Database using Pandas
+# Database Programming using Pandas
 As part of this section, we will see how to write data to Postgres Database Tables using Pandas. Here are the topics which we are going to cover.
 
 * Validate Postgres Setup using Docker
