@@ -86,16 +86,23 @@ for df in json_reader:
 
 ## Validate orders table in database
 
+As data is loaded into the table using Pandas, let us connect to the database and validate to see if the data is populated into the right table as per our expectations.
+
+* Connecting to the database.
+
 ```shell
-docker exec -it retail psql -U retail_user -d retail_db -W
+docker exec -it retail_pg psql -U retail_user -d retail_db -W
 ```
 
+* Running queries to validate data in the table.
 ```sql
 \d orders
 
 SELECT * FROM orders LIMIT 10;
 
 SELECT count(*) FROM orders;
+
+SELECT order_status, count(1) FROM orders GROUP BY order_status;
 ```
 
 ## Validate orders table using Pandas
