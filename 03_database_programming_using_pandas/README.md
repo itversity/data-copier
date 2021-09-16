@@ -71,7 +71,7 @@ Let us connect to the postgres database retail_db and populate the table using `
 * Connect to the database
 
 ```shell
-docker exec -it retail psql -U retail_user -d retail_db
+docker exec -it retail_pg psql -U retail_user -d retail_db -W
 ```
 
 * Insert data into the table
