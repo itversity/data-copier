@@ -164,7 +164,7 @@ SELECT * FROM users;
 As we have gone through the steps related to reading from database table as well as writing to database table using Pandas, let us clean up the table by dropping it.
 
 ```shell
-docker exec -it retail psql -U retail_user -d retail_db
+docker exec -it retail_pg psql -U retail_user -d retail_db -W
 ```
 
 ```sql
