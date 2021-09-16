@@ -151,7 +151,7 @@ pd.read_sql('SELECT * FROM users', conn)
 Let us also validate by running query by connecting to the database to confirm data is populated in the correct database table.
 
 ```shell
-docker exec -it retail psql -U retail_user -d retail_db
+docker exec -it retail_pg psql -U retail_user -d retail_db -W
 ```
 
 ```sql
