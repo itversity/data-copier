@@ -34,7 +34,7 @@ df.to_sql(table_name, conn, if_exists='append', index=False)
 
 ## Validate departments table
 
-As the table is populated, let us see if we the data is now available in the table.
+As the table is populated, let us see if the data is now available in the table.
 
 ```python
 import pandas as pd
