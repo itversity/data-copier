@@ -49,7 +49,7 @@ df
 
 df.count()
 
-df.read_sql(
+pd.read_sql(
 	'SELECT count(1) FROM departments',
 	conn
 )
