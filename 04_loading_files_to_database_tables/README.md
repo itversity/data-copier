@@ -73,7 +73,7 @@ file_name = os.listdir(f'{BASE_DIR}/{table_name}')[0]
 fp = f'{BASE_DIR}/{table_name}/{file_name}'
 
 import pandas as pd
-json_reader = pd.read_json(fp, lines=True, chunksize=10000)
+json_reader = pd.read_json(fp, lines=True, chunksize=1000)
 
 conn = 'postgresql://retail_user:itversity@localhost:5452/retail_db'
 
