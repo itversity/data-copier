@@ -1,4 +1,5 @@
 data-copier-env
+dc-venv
 __pycache__
 .idea
 data
