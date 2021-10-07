@@ -146,15 +146,121 @@ if __name__ == '__main__':
 
 ## Validate read logic
 
+Let us validate the read logic that is developed as part of **read.py** program.
+* We can validate either by using Pycharm Run option or using Python CLI.
+* Here are the steps that are involved using Pycharm Run option.
+  * Run the program and ignore any errors. It will create application under **Edit Configurations**.
+  * Go to **Edit Configurations** and set required environment variables - `BASE_DIR` and `TABLE_NAME`.
+  * Run the application and see the output.
+* Here are the steps that are involved using Python CLI (under Terminal).
+  * Launch Terminal within Pycharm.
+  * Set environment variables. We can use `export` on Linux or Mac and `$env` on Windows to set the environment variables.
+  * Run using `python app.py` and review the output.
 
 ## Write logic using Pandas
 
+Let us develop the logic to write Dataframe into postgres database table as part of **write.py** program.
+* Create program by name **write.py**.
+* Here is the function to write the Dataframe to database table. It also contains required logic to test the functionality.
+
+```python
+def load_db_table(df, conn, table_name, key):
+    min_key = df[key].min()
+    max_key = df[key].max()
+    df.to_sql(table_name, conn, if_exists='append', index=False)
+    print(f'Loaded data for {table_name} with in the range of {min_key} and {max_key}')
+
+
+if __name__ == '__main__':
+    import pandas as pd
+    import os
+
+    data = [
+        {'user_id': 1, 'user_first_name': 'Scott', 'user_last_name': 'Tiger'},
+        {'user_id': 2, 'user_first_name': 'Donald', 'user_last_name': 'Duck'}
+    ]
+    df = pd.DataFrame(data)
+    configs = dict(os.environ.items())
+    conn = f'postgresql://{configs["DB_USER"]}:{configs["DB_PASS"]}@{configs["DB_HOST"]}:{configs["DB_PORT"]}/{configs["DB_NAME"]}'
+
+    load_db_table(df, conn, 'users', 'user_id')
+```
 
 ## Validate write logic
-## Create Driver Program
-## Validate Driver Program
-## Passing Environment Variables using Pycharm
-## Validate Application using Pycharm
-## Validate Application using Terminal
-## Passing Table List as argument
-## Passing Table List using file
+
+As we have developed the function to write Dataframe to Postgres database table along with test logic, it is time for us to validate.
+* We can validate either by using Pycharm Run Configurations or Python command using CLI.
+* Here are the steps using Pycharm Run Configurations.
+  * Run the application to create configuration under run. Ignore any errors.
+  * Set the required environment variables under run configuration of the application.
+  * Run the application using Pycharm run option.
+  * Review the output to confirm if the data is loaded successfully or not.
+  * Connect to the database and validate data in the users table.
+* Here are the steps using Python command as part of CLI.
+  * Set required environment variables (on Windows we need to use `$env` and on Mac or Linux we need to use `export` command).
+  * Run the program using `python write.py`.
+  * Review the output to confirm if the data is loaded successfully or not.
+  * Connect to the database and validate data in the users table. We should see duplicate records in the table as we loaded same data twice.
+
+## Integrate read and write logic
+
+As we are done with read and write logic, let us integrate both by using driver program.
+* We can update **app.py** with the below logic.
+```python
+import os
+from read import get_json_reader
+from write import load_db_table
+
+
+def process_table(BASE_DIR, conn, table_name):
+    json_reader = get_json_reader(BASE_DIR, table_name)
+    for df in json_reader:
+        load_db_table(df, conn, table_name, df.columns[0])
+
+
+def main():
+    BASE_DIR = os.environ.get('BASE_DIR')
+    table_name = os.environ.get('TABLE_NAME')
+
+    configs = dict(os.environ.items())
+    conn = f'postgresql://{configs["DB_USER"]}:{configs["DB_PASS"]}@{configs["DB_HOST"]}:{configs["DB_PORT"]}/{configs["DB_NAME"]}'
+    process_table(BASE_DIR, conn, table_name)
+
+
+if __name__ == '__main__':
+    main()
+```
+
+## Validate Integration logic
+
+As we are done with integration of read and write logic as part of driver program, let us go ahead and validate.
+* As we have seen before you can either validate using Pycharm run with proper configurations or Python command using CLI.
+* We just need to set all required environment variables and run the driver program.
+* Also, we need to validate by running queries against the table by connecting to the database.
+* Let us get into the validation using Pycharm Run using configurations.
+
+## Develop logic for multiple tables
+
+Let us go through the details of developing the logic to load the data from files into respective tables where we need to pass list of tables as argument.
+* We will pass list of tables as part of comma separated string.
+* For now we will pass the comma separated string as run time argument. It can be accessed using `sys` module.
+* Once the list of tables is passed as comma separated string, we need to do the following:
+  * Split the comma separated string into a list of tables.
+  * Iterate through the list and invoke the logic to read from file and write to the table for each item in the list.
+  * We will also modularize to make sure we have a function which will read and write for a table which is passed as argument.
+
+
+## Validate logic for multiple tables
+
+As our program to process multiple tables takes run time arguments, let us understand how to pass the run time arguments to validate.
+* We can either use Pycharm run or Python command using CLI for the validation.
+* Here is the process to pass the run time arguments using Pycharm.
+  * Go to **Edit Configurations** and pass the argument as part of parameters.
+  * Make sure all the environment variables defined.
+  * Now we should be able to run the program which takes arguments using Pycharm.
+  * Let us populate **departments** and **categories** using this approach and validate.
+* Here is the process to pass the run time arguments using Python command as part of CLI.
+  * Go to the Terminal or Powershell and make sure virtual environment is activated. We also need to make sure that we are in the working directory of the project.
+  * If we use Pycharm integrated terminal, we will be in working directory as part of correct Python virtual environment.
+  * Now we can pass the run time arguments to the program as part of `python` command after the program name.
+  * Let us populate **products** using this approach and validate.
