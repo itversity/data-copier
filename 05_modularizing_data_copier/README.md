@@ -71,7 +71,7 @@ Let us get an overview of environment variables.
 * Once the development is done we will deploy them in QA/UAT and then in Production.
 * There will be several components such as databases which we need to connect our application to.
 * For each of the environments such as Dev, QA/UAT, Production, etc the connectivity information will differ. However, the core logic remain same.
-* Instead of hard coding such information we need to pass them as environment variables.
+* Instead of hard coding such information we need to pass them as variables.
 * One of the way to pass the such information is to pass them as environment variables.
 * In Mac or Linux, we can pass environment variables using `export` command. For example, `export DB_NAME=retail_db`.
 * On Windows, we can pass environment variables using `$env:DB_NAME = "retail_db"`.
